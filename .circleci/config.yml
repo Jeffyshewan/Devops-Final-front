@@ -17,8 +17,22 @@ jobs:
           key: npm-v2-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
+  server-deploy:
+    docker:
+      - image: circleci/node:dubnium-browsers
+    working_directory: ~/deploy-doc-server
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Deploy app
+          command: sudo npm install -g --silent netlify-cli
+            netlify deploy --prod --auth $NETLIFY_AUTH_TOKEN
 
 workflows:
   node-tests:
     jobs:
       - yarn-install-build
+      - server-deploy:
+          requires: 
+            - yarn-install-build
