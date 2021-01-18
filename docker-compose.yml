@@ -1,0 +1,10 @@
+version: '2'
+services:
+    networks:
+      - web
+
+networks:
+  # Specifie que le network web est accessible depuis l'exterieur
+  web:
+    external: true
+
